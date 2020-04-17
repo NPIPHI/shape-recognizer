@@ -14,5 +14,14 @@
   },
   "devDependencies": {
     "ts-loader": "^7.0.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NPIPHI/shape-recognizer.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/NPIPHI/shape-recognizer/issues"
+  },
+  "homepage": "https://github.com/NPIPHI/shape-recognizer#readme"
 }
