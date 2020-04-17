@@ -1,0 +1,12 @@
+node_modules
+__pycache__
+.idea
+.vscode
+dist
+out
+pythonSrc
+temporalTrainingImages
+trainingImages
+testingData
+venv
+index.html
