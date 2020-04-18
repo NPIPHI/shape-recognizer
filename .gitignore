@@ -10,6 +10,9 @@ testingData
 venv
 index.html
 accelerationTrainingImages
+tsSrc
+webpack.config.js
+tsconfig.json
 models/JSMainModel
 models/temporalTestingModel
 models/thiccModel
