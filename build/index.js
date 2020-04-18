@@ -2,8 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const tf = require("@tensorflow/tfjs");
 const point_1 = require("./point");
-var point_2 = require("./point");
-exports.Point = point_2.Point;
 const modelName = "accelerationTestingModel";
 const labels = ["Zig", "ZigZag", "Rectangle", "Triangle", "Circle"];
 class ShapePredictor {
