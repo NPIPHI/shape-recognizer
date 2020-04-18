@@ -1,7 +1,8 @@
 import * as tf from "@tensorflow/tfjs";
 import { Point, PointPath } from "./point";
 export { Point } from "./point";
-export declare class shapePredictor {
+export declare function sP(): Promise<shapePredictor>;
+declare class shapePredictor {
     model: tf.LayersModel;
     private xRes;
     private yRes;
