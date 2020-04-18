@@ -169,14 +169,36 @@ class PointPath {
         return this.length;
     }
     getNormalizeTranform() {
-        let boundingBox = this.getBoundingBox();
-        let offset = boundingBox.points[1];
-        let rot = boundingBox.points[0].minus(boundingBox.points[1]).angle();
-        let xDist = boundingBox.points[0].dist(boundingBox.points[1]);
-        let yDist = boundingBox.points[1].dist(boundingBox.points[2]);
-        return new Transform(offset.times(-1), rot, new Point(1 / xDist, 1 / yDist));
+        const maxRatio = 2;
+        let xVals = this.points.map(point => point.x);
+        let yVals = this.points.map(point => point.y);
+        let minX = Math.min(...xVals);
+        let minY = Math.min(...yVals);
+        let maxX = Math.max(...xVals);
+        let maxY = Math.max(...yVals);
+        let xDist = maxX - minX;
+        let yDist = maxY - minY;
+        if (xDist < yDist / maxRatio) {
+            xDist = yDist / maxRatio;
+        }
+        if (yDist < xDist / maxRatio) {
+            yDist = xDist / maxRatio;
+        }
+        return new Transform(new Point(-minX, -minY), 0, new Point(1 / xDist, 1 / yDist));
     }
-    getBoundingBox() {
+    static unitSquare() {
+        return new PointPath([new Point(0, 0), new Point(1, 0), new Point(1, 1), new Point(0, 1)]);
+    }
+    getAxisAlignedBoundingBox() {
+        let xVals = this.points.map(point => point.x);
+        let yVals = this.points.map(point => point.y);
+        let minX = Math.min(...xVals);
+        let minY = Math.min(...yVals);
+        let maxX = Math.max(...xVals);
+        let maxY = Math.max(...yVals);
+        return new PointPath([new Point(minX, minY), new Point(maxX, minY), new Point(maxX, maxY), new Point(minX, maxY)]);
+    }
+    getMinimumBoundingBox() {
         let minHull = this.hull();
         let minRectArea = Infinity;
         let minRect = [];

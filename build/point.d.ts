@@ -41,7 +41,9 @@ export declare class PointPath {
     rotate(theta: number): void;
     getLength(): number;
     private getNormalizeTranform;
-    private getBoundingBox;
+    static unitSquare(): PointPath;
+    getAxisAlignedBoundingBox(): PointPath;
+    private getMinimumBoundingBox;
     private hull;
     private quickHall;
     rastorizeBW(xRes: number, yRes: number, blurRadius?: number): bwImage;
