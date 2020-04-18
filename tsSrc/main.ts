@@ -18,10 +18,10 @@ let images: imageType[] = [];
 let predictionElement: HTMLDivElement;
 let processedCanvas: HTMLCanvasElement;
 let lastImage: imageType;
-let predictor: shapePredictor;
+let predictor: any;
 let predictedType: string;
 
-shapePredictor.init().then((shapePredictor)=>{
+shapePredictor().then((shapePredictor)=>{
     predictor = shapePredictor;
     main();
 })
