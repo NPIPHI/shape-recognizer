@@ -22,12 +22,11 @@ class ShapePredictor {
         let path;
         if (shape.map) {
             path = new point_1.PointPath(shape);
-            path.normalize();
         }
         else if (shape.flip) {
-            path.normalize;
         }
         if (path.points.length > 1) {
+            path.normalize();
             image = path.rastorizeRGB(this.xRes, this.yRes);
             let prediction = this.model.predict(image.data.reshape([1, this.xRes, this.yRes, 3]));
             let values = prediction.dataSync();
