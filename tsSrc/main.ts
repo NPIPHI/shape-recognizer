@@ -4,6 +4,8 @@ import * as input from "./input"
 import { saveImageList } from "./imageIO"
 import { PointPath, Point } from "./point"
 import { bwImage, RGBImage } from './image';
+export { Point } from "./point"
+
 
 const drawing = new input.drawingCanvas(720, 720, 32);
 let modelName = "accelerationTestingModel"
