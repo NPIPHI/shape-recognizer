@@ -6,16 +6,15 @@ var point_2 = require("./point");
 exports.Point = point_2.Point;
 const modelName = "accelerationTestingModel";
 const labels = ["Zig", "ZigZag", "Rectangle", "Triangle", "Circle"];
-async function shapePredictor() {
-    let model = await tf.loadLayersModel("https://raw.githubusercontent.com/NPIPHI/shape-recognizer/master/models/accelerationTestingModel/model.json");
-    return new ShapePredictor(model);
-}
-exports.shapePredictor = shapePredictor;
 class ShapePredictor {
     constructor(model) {
         this.xRes = 64;
         this.yRes = 64;
         this.model = model;
+    }
+    static async loadModel() {
+        let model = await tf.loadLayersModel("https://raw.githubusercontent.com/NPIPHI/shape-recognizer/master/models/accelerationTestingModel/model.json");
+        return new ShapePredictor(model);
     }
     predict(shape) {
         let image;
@@ -38,4 +37,5 @@ class ShapePredictor {
         }
     }
 }
+exports.ShapePredictor = ShapePredictor;
 //# sourceMappingURL=index.js.map
