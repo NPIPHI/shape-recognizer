@@ -19,6 +19,7 @@ let predictionElement: HTMLDivElement;
 let processedCanvas: HTMLCanvasElement;
 let lastImage: imageType;
 let predictor: shapePredictor;
+let predictedType: string;
 
 shapePredictor.init().then((shapePredictor)=>{
     predictor = shapePredictor;
@@ -78,13 +79,13 @@ function main() {//idk bad name
             images.push(path.flip().rastorizeRGB(xRes, yRes));
         }
         if (runModel) {
-            predictionElement.innerHTML = predictor.predict(lastImage);
+            predictedType = predictor.predict(path)
+            predictionElement.innerHTML = predictedType;
         }
     }
 
     window.addEventListener('keydown', (key) => {
         if (key.key == "Enter") {
-            let predictedType = predictor.predict(images[0])
             saveImageList(images, predictedType);
         }
         if (key.key == "Delete") {
