@@ -4,58 +4,21 @@ import * as input from "./input"
 import { saveImageList } from "./imageIO"
 import { PointPath, Point } from "./point"
 import { bwImage, RGBImage } from './image';
-export { Point } from "./point"
+import {shapePredictor} from "./index"
 
 
 const drawing = new input.drawingCanvas(720, 720, 32);
-let modelName = "accelerationTestingModel"
 class imageType extends RGBImage{}
 const dataSaveMode = true;
 const runModel = true;
 const xRes = 64, yRes = 64;
 // const names = ["Rectangle", "Triangle", "Circle", "Squiggle", "Semi"];
-const names = ["TB", "TBT", "Rectangle", "Triangle", "Circle"];
-const labels = ["There and back", "there and back and there"];
 let initilized: boolean = false;
 let images: imageType[] = [];
 let predictionElement: HTMLDivElement;
 let processedCanvas: HTMLCanvasElement;
 let lastImage: imageType;
 let predictor: shapePredictor;
-
-export class shapePredictor{
-    model: tf.LayersModel;
-    private xRes: number = 64;
-    private yRes: number = 64;
-    constructor(model: tf.LayersModel){
-        this.model = model
-    }
-    static init(): Promise<shapePredictor>{
-        return new Promise<shapePredictor>((resolve: any, reject: any)=>{
-            tf.loadLayersModel("./models/" + modelName + "/model.json").then(
-                (nn) => {
-                    document.title = modelName;
-                    console.log("loaded model");
-                    resolve(new shapePredictor(nn));
-                }
-            )
-        })
-    }
-    predict(shape: Point[] | PointPath | RGBImage){
-        let image: imageType;
-        if((shape as Point[]).map){
-            image = (new PointPath(shape as Point[])).rastorizeRGB(xRes, yRes);
-        } else if((shape as RGBImage).data) {
-            image = shape as RGBImage;
-        } else if((shape as PointPath).flip) {
-            image = (shape as PointPath).rastorizeRGB(xRes, yRes);
-        }
-        let prediction = this.model.predict(image.data.reshape([1, xRes, yRes, 3])) as tf.Tensor;
-        let values = prediction.dataSync();
-        let index = values.indexOf(Math.max(...values));
-        return names[index];
-    }
-}
 
 shapePredictor.init().then((shapePredictor)=>{
     predictor = shapePredictor;
