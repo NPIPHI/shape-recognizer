@@ -20,7 +20,8 @@ class ShapePredictor {
         let image;
         let path;
         if (shape.map) {
-            path = new point_1.PointPath(shape);
+            let pointShape = shape.map((point) => new point_1.Point(point.x, point.y));
+            path = new point_1.PointPath(pointShape);
         }
         else if (shape.flip) {
         }
