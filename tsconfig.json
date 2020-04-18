@@ -12,8 +12,6 @@
         "resolveJsonModule": true
     },
     "include": [
-        "tsSrc/index.ts",
-        "tsSrc/Point.ts",
-        "tsSrc/image.ts"
+        "tsSrc/*"
     ]
 }

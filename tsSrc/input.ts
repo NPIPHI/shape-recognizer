@@ -60,7 +60,6 @@ export class drawingCanvas {
 
     private endDrawing(owner: drawingCanvas) {
         if(owner.path.points.length>1){
-            owner.path.normalize();
             owner.onFinishDrawing(owner.path);
         }
     }

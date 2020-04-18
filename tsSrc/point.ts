@@ -55,7 +55,7 @@ export class Point {
     angle(): number {
         return Math.atan2(this.y, this.x);
     }
-    isShapePredictorPoint(): void{
+    isShapePredictorPoint(): void {
 
     }
 }
@@ -130,8 +130,8 @@ export class PointPath {
         scalar *= this.length;
         for (let i = 0; i < this.distances.length; i++) {
             if (scalar < currentPos + this.distances[i]) {
-                if(i < this.distances.length - 1){
-                    return this.points[i].plus(this.points[i+2]).minus(this.points[i+1].times(2)).length();
+                if (i < this.distances.length - 1) {
+                    return this.points[i].plus(this.points[i + 2]).minus(this.points[i + 1].times(2)).length();
                 } else {
                     return 0;
                 }
@@ -176,15 +176,42 @@ export class PointPath {
         return this.length;
     }
     private getNormalizeTranform(): Transform {
-        let boundingBox = this.getBoundingBox();
-        let offset = boundingBox.points[1];
-        let rot = boundingBox.points[0].minus(boundingBox.points[1]).angle();
-        let xDist = boundingBox.points[0].dist(boundingBox.points[1]);
-        let yDist = boundingBox.points[1].dist(boundingBox.points[2]);
-        return new Transform(offset.times(-1), rot, new Point(1 / xDist, 1 / yDist));
-
+        const maxRatio = 2
+        // let boundingBox = this.getBoundingBox();
+        // let offset = boundingBox.points[1];
+        // let rot = boundingBox.points[0].minus(boundingBox.points[1]).angle();
+        // let xDist = boundingBox.points[0].dist(boundingBox.points[1]);
+        // let yDist = boundingBox.points[1].dist(boundingBox.points[2]);
+        // return new Transform(offset.times(-1), rot, new Point(1 / xDist, 1 / yDist));
+        let xVals = this.points.map(point => point.x);
+        let yVals = this.points.map(point => point.y);
+        let minX = Math.min(...xVals);
+        let minY = Math.min(...yVals);
+        let maxX = Math.max(...xVals);
+        let maxY = Math.max(...yVals);
+        let xDist = maxX - minX;
+        let yDist = maxY - minY;
+        if (xDist < yDist / maxRatio) {
+            xDist = yDist / maxRatio
+        }
+        if (yDist < xDist / maxRatio) {
+            yDist = xDist / maxRatio
+        }
+        return new Transform(new Point(-minX, -minY), 0, new Point(1 / xDist, 1 / yDist));
     }
-    private getBoundingBox(): PointPath {
+    static unitSquare(): PointPath {
+        return new PointPath([new Point(0, 0), new Point(1, 0), new Point(1, 1), new Point(0, 1)])
+    }
+    getAxisAlignedBoundingBox(): PointPath {
+        let xVals = this.points.map(point => point.x);
+        let yVals = this.points.map(point => point.y);
+        let minX = Math.min(...xVals);
+        let minY = Math.min(...yVals);
+        let maxX = Math.max(...xVals);
+        let maxY = Math.max(...yVals);
+        return new PointPath([new Point(minX, minY), new Point(maxX, minY), new Point(maxX, maxY), new Point(minX, maxY)])
+    }
+    private getMinimumBoundingBox(): PointPath {
         let minHull = this.hull();
         let minRectArea = Infinity;
         let minRect: Point[] = [];
@@ -296,23 +323,23 @@ export class PointPath {
                 for (let j = -blurRadius; j <= blurRadius; j++) {
                     RGBImageData[(x + i + (y + j) * xRes) * 3] += (2 * blurRadius * blurRadius - i * i - j * j);
                     RGBImageData[(x + i + (y + j) * xRes) * 3 + 1] += acceleration * (2 * blurRadius * blurRadius - i * i - j * j) / (2 * blurRadius * blurRadius);
-                    RGBImageData[(x + i + (y + j) * xRes) * 3 + 2] += (pathIndex/(this.length * 100)) * (2 * blurRadius * blurRadius - i * i - j * j) / (2 * blurRadius * blurRadius);
+                    RGBImageData[(x + i + (y + j) * xRes) * 3 + 2] += (pathIndex / (this.length * 100)) * (2 * blurRadius * blurRadius - i * i - j * j) / (2 * blurRadius * blurRadius);
                 }
             }
         }
         let accelerationMax = 10 * accelerationTotal / (this.length * 100);
-        for (let i = 0; i < RGBImageData.length; i+=3) {
+        for (let i = 0; i < RGBImageData.length; i += 3) {
             RGBImageData[i] /= alphaMax;
-            RGBImageData[i+1] /= accelerationMax;
-            RGBImageData[i+2] /= timeMax;
-            if(RGBImageData[i] > 1){
+            RGBImageData[i + 1] /= accelerationMax;
+            RGBImageData[i + 2] /= timeMax;
+            if (RGBImageData[i] > 1) {
                 RGBImageData[i] = 1;
             }
-            if(RGBImageData[i+1] > 1){
-                RGBImageData[i+1] = 1;
+            if (RGBImageData[i + 1] > 1) {
+                RGBImageData[i + 1] = 1;
             }
-            if(RGBImageData[i+2] > 1){
-                RGBImageData[i+2] = 1;
+            if (RGBImageData[i + 2] > 1) {
+                RGBImageData[i + 2] = 1;
             }
         }
         // for (let i = 0; i < RGBImageData.length; i+=3){
@@ -323,9 +350,9 @@ export class PointPath {
         // }
         return new RGBImage(xRes, yRes, RGBImageData);
     }
-    flip(): PointPath{
+    flip(): PointPath {
         let points: Point[] = [];
-        this.points.forEach(point=>{
+        this.points.forEach(point => {
             points.push(new Point(-point.x, point.y))
         })
         return new PointPath(points);
