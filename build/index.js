@@ -14,7 +14,7 @@ class shapePredictor {
     }
     static init() {
         return new Promise((resolve, reject) => {
-            tf.loadLayersModel("./models/" + modelName + "/model.json").then((nn) => {
+            tf.loadLayersModel("https://raw.githubusercontent.com/NPIPHI/shape-recognizer/master/models/accelerationTestingModel/model.json").then((nn) => {
                 console.log("loaded model");
                 resolve(new shapePredictor(nn));
             });
