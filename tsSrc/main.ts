@@ -6,37 +6,66 @@ import { PointPath, Point } from "./point"
 import { bwImage, RGBImage } from './image';
 
 const drawing = new input.drawingCanvas(720, 720, 32);
-let model: tf.LayersModel;
 let modelName = "accelerationTestingModel"
 class imageType extends RGBImage{}
 const dataSaveMode = true;
 const runModel = true;
 const xRes = 64, yRes = 64;
 // const names = ["Rectangle", "Triangle", "Circle", "Squiggle", "Semi"];
-const names = ["TB", "TBT", "Rectangle", "Triangle", "Circle"]
+const names = ["TB", "TBT", "Rectangle", "Triangle", "Circle"];
 const labels = ["There and back", "there and back and there"];
-
-let loadModel = tf.loadLayersModel("./models/" + modelName + "/model.json").then(
-    (nn) => {
-        document.title = modelName;
-        console.log("loaded model");
-        model = nn;
-        // model.predict(tf.fill([1, xRes, yRes, ], 0))
-        main();
-    }
-);
-
+let initilized: boolean = false;
 let images: imageType[] = [];
 let predictionElement: HTMLDivElement;
 let processedCanvas: HTMLCanvasElement;
 let lastImage: imageType;
+let predictor: shapePredictor;
 
-function categorize(image: bwImage | RGBImage): string {
-    let prediction = model.predict(image.data.reshape([1, image.width, image.height, image.depth])) as tf.Tensor;
-    let values = prediction.dataSync();
-    let index = values.indexOf(Math.max(...values));
-    return names[index];
+export class shapePredictor{
+    model: tf.LayersModel;
+    private xRes: number = 64;
+    private yRes: number = 64;
+    constructor(model: tf.LayersModel){
+        this.model = model
+    }
+    static init(): Promise<shapePredictor>{
+        return new Promise<shapePredictor>((resolve: any, reject: any)=>{
+            tf.loadLayersModel("./models/" + modelName + "/model.json").then(
+                (nn) => {
+                    document.title = modelName;
+                    console.log("loaded model");
+                    resolve(new shapePredictor(nn));
+                }
+            )
+        })
+    }
+    predict(shape: Point[] | PointPath | RGBImage){
+        let image: imageType;
+        if((shape as Point[]).map){
+            image = (new PointPath(shape as Point[])).rastorizeRGB(xRes, yRes);
+        } else if((shape as RGBImage).data) {
+            image = shape as RGBImage;
+        } else if((shape as PointPath).flip) {
+            image = (shape as PointPath).rastorizeRGB(xRes, yRes);
+        }
+        let prediction = this.model.predict(image.data.reshape([1, xRes, yRes, 3])) as tf.Tensor;
+        let values = prediction.dataSync();
+        let index = values.indexOf(Math.max(...values));
+        return names[index];
+    }
 }
+
+shapePredictor.init().then((shapePredictor)=>{
+    predictor = shapePredictor;
+    main();
+})
+
+// function categorize(image: bwImage | RGBImage): string {
+//     let prediction = model.predict(image.data.reshape([1, image.width, image.height, image.depth])) as tf.Tensor;
+//     let values = prediction.dataSync();
+//     let index = values.indexOf(Math.max(...values));
+//     return names[index];
+// }
 
 function setCanvas(image: bwImage | RGBImage) {
     let ctx = processedCanvas.getContext("2d");
@@ -45,7 +74,7 @@ function setCanvas(image: bwImage | RGBImage) {
 }
 
 function shapeAnylsis(path: PointPath){
-    let shapeType = categorize(path.rastorizeRGB(xRes, yRes));
+    let shapeType = predictor.predict(path);
     let boundingBox: PointPath;
     if(shapeType=="Rectangle"){
         boundingBox = new PointPath([new Point(0, 0), new Point(0, 1), new Point(1, 1), new Point(1, 0)]);
@@ -84,13 +113,13 @@ function main() {//idk bad name
             images.push(path.flip().rastorizeRGB(xRes, yRes));
         }
         if (runModel) {
-            predictionElement.innerHTML = categorize(lastImage);
+            predictionElement.innerHTML = predictor.predict(lastImage);
         }
     }
 
     window.addEventListener('keydown', (key) => {
         if (key.key == "Enter") {
-            let predictedType = categorize(images[0])
+            let predictedType = predictor.predict(images[0])
             saveImageList(images, predictedType);
         }
         if (key.key == "Delete") {

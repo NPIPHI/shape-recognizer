@@ -35,7 +35,7 @@ export class drawingCanvas {
         window.addEventListener("mouseup", ()=>this.endDrawing(this));
     }
 
-    private mouseMove(owner, m) {
+    private mouseMove(owner: drawingCanvas, m: any) {
         mouseObj.x = m.offsetX;
         mouseObj.y = m.offsetY;
         if (mouseObj.x >= 0 && mouseObj.x < owner.ctx.canvas.width &&
@@ -63,7 +63,7 @@ export class drawingCanvas {
         }
     }
 
-    onFinishDrawing(any){
+    onFinishDrawing(ojb: any){
     }
 }
 

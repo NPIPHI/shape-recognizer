@@ -31,7 +31,7 @@ export function saveImageList(images: bwImage[] | RGBImage[], name="untitled.png
     }   
 }
 
-function saveCanvas(canvas, name){
+function saveCanvas(canvas: HTMLCanvasElement, name: string){
     let image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
     let link = document.createElement("a");
     link.setAttribute("download", name);
