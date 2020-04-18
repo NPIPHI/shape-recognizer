@@ -1,59 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const tf = require("@tensorflow/tfjs");
 const input = require("./input");
 const imageIO_1 = require("./imageIO");
 const point_1 = require("./point");
 const image_1 = require("./image");
+const index_1 = require("./index");
 const drawing = new input.drawingCanvas(720, 720, 32);
-let modelName = "accelerationTestingModel";
 class imageType extends image_1.RGBImage {
 }
 const dataSaveMode = true;
 const runModel = true;
 const xRes = 64, yRes = 64;
-const names = ["TB", "TBT", "Rectangle", "Triangle", "Circle"];
-const labels = ["There and back", "there and back and there"];
 let initilized = false;
 let images = [];
 let predictionElement;
 let processedCanvas;
 let lastImage;
 let predictor;
-class shapePredictor {
-    constructor(model) {
-        this.xRes = 64;
-        this.yRes = 64;
-        this.model = model;
-    }
-    static init() {
-        return new Promise((resolve, reject) => {
-            tf.loadLayersModel("./models/" + modelName + "/model.json").then((nn) => {
-                document.title = modelName;
-                console.log("loaded model");
-                resolve(new shapePredictor(nn));
-            });
-        });
-    }
-    predict(shape) {
-        let image;
-        if (shape.map) {
-            image = (new point_1.PointPath(shape)).rastorizeRGB(xRes, yRes);
-        }
-        else if (shape.data) {
-            image = shape;
-        }
-        else if (shape.flip) {
-            image = shape.rastorizeRGB(xRes, yRes);
-        }
-        let prediction = this.model.predict(image.data.reshape([1, xRes, yRes, 3]));
-        let values = prediction.dataSync();
-        let index = values.indexOf(Math.max(...values));
-        return names[index];
-    }
-}
-exports.shapePredictor = shapePredictor;
-shapePredictor.init().then((shapePredictor) => {
+let predictedType;
+index_1.shapePredictor.init().then((shapePredictor) => {
     predictor = shapePredictor;
     main();
 });
@@ -100,12 +65,12 @@ function main() {
             images.push(path.flip().rastorizeRGB(xRes, yRes));
         }
         if (runModel) {
-            predictionElement.innerHTML = predictor.predict(lastImage);
+            predictedType = predictor.predict(path);
+            predictionElement.innerHTML = predictedType;
         }
     };
     window.addEventListener('keydown', (key) => {
         if (key.key == "Enter") {
-            let predictedType = predictor.predict(images[0]);
             imageIO_1.saveImageList(images, predictedType);
         }
         if (key.key == "Delete") {
