@@ -19,12 +19,15 @@ class ShapePredictor {
     }
     predict(shape) {
         let image;
+        let path;
         if (shape.map) {
-            image = (new point_1.PointPath(shape)).rastorizeRGB(this.xRes, this.yRes);
+            path = new point_1.PointPath(shape);
+            path.normalize();
         }
         else if (shape.flip) {
-            image = shape.rastorizeRGB(this.xRes, this.yRes);
+            path.normalize;
         }
+        image = path.rastorizeRGB(this.xRes, this.yRes);
         let prediction = this.model.predict(image.data.reshape([1, this.xRes, this.yRes, 3]));
         let values = prediction.dataSync();
         let index = values.indexOf(Math.max(...values));
