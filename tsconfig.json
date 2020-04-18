@@ -11,6 +11,8 @@
         "outDir": "build"
     },
     "include": [
-        "tsSrc/*"
+        "tsSrc/index.ts",
+        "tsSrc/Point.ts",
+        "tsSrc/image.ts"
     ]
 }

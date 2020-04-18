@@ -15,7 +15,6 @@ class shapePredictor {
     static init() {
         return new Promise((resolve, reject) => {
             tf.loadLayersModel("./models/" + modelName + "/model.json").then((nn) => {
-                document.title = modelName;
                 console.log("loaded model");
                 resolve(new shapePredictor(nn));
             });
