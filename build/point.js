@@ -53,6 +53,8 @@ class Point {
     angle() {
         return Math.atan2(this.y, this.x);
     }
+    isShapePredictorPoint() {
+    }
 }
 exports.Point = Point;
 class Transform {
@@ -72,7 +74,7 @@ class PointPath {
         this.length = 0;
         this.distances = [];
         for (let i = 0; i < points.length - 1; i++) {
-            let dist = points[i].dist(points[i + 1]);
+            let dist = this.points[i].dist(this.points[i + 1]);
             this.length += dist;
             this.distances.push(dist);
         }

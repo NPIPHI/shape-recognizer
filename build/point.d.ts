@@ -16,6 +16,7 @@ export declare class Point {
     dot(vec: Point): number;
     normalize(): Point;
     angle(): number;
+    isShapePredictorPoint(): void;
 }
 declare class Transform {
     offset: Point;
