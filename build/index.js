@@ -27,11 +27,16 @@ class ShapePredictor {
         else if (shape.flip) {
             path.normalize;
         }
-        image = path.rastorizeRGB(this.xRes, this.yRes);
-        let prediction = this.model.predict(image.data.reshape([1, this.xRes, this.yRes, 3]));
-        let values = prediction.dataSync();
-        let index = values.indexOf(Math.max(...values));
-        return labels[index];
+        if (path.points.length > 1) {
+            image = path.rastorizeRGB(this.xRes, this.yRes);
+            let prediction = this.model.predict(image.data.reshape([1, this.xRes, this.yRes, 3]));
+            let values = prediction.dataSync();
+            let index = values.indexOf(Math.max(...values));
+            return labels[index];
+        }
+        else {
+            throw "Incomplete shape";
+        }
     }
 }
 //# sourceMappingURL=index.js.map
