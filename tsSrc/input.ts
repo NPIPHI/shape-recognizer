@@ -1,21 +1,23 @@
 import { Point, PointPath } from "./point"
 
-window.addEventListener("mousedown", (mouse) => {
-    if (mouse.button == 0) {
-        mouseObj.left = true;
-    }
-    if (mouse.button == 1) {
-        mouseObj.right = true;
-    }
+window.addEventListener("pointerdown", (mouse) => {
+    // if (mouse.button == 0) {
+    //     mouseObj.left = true;
+    // }
+    // if (mouse.button == 1) {
+    //     mouseObj.right = true;
+    // }
+    mouseObj.left = true;
 })
 
-window.addEventListener("mouseup", (mouse) => {
-    if (mouse.button == 0) {
-        mouseObj.left = false;
-    }
-    if (mouse.button == 1) {
-        mouseObj.right = false;
-    }
+window.addEventListener("pointerup", (mouse) => {
+    // if (mouse.button == 0) {
+    //     mouseObj.left = false;
+    // }
+    // if (mouse.button == 1) {
+    //     mouseObj.right = false;
+    // }
+    mouseObj.left = false;
 })
 
 let mouseObj = { left: false, right: false, x: 0, y: 0 };
@@ -30,9 +32,9 @@ export class drawingCanvas {
         canvas.height = height;
         document.body.appendChild(canvas);
         this.ctx = canvas.getContext("2d");
-        canvas.addEventListener("mousemove", (mouse)=>this.mouseMove(this, mouse))
-        window.addEventListener("mousedown", ()=>this.startDrawing(this));
-        window.addEventListener("mouseup", ()=>this.endDrawing(this));
+        canvas.addEventListener("pointermove", (mouse)=>this.mouseMove(this, mouse));
+        canvas.addEventListener("pointerdown", ()=>this.startDrawing(this));
+        canvas.addEventListener("pointerup", ()=>this.endDrawing(this));
     }
 
     private mouseMove(owner: drawingCanvas, m: any) {
