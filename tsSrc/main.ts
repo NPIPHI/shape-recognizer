@@ -98,7 +98,13 @@ function main() {//idk bad name
         }
         // shapeAnylsis(path);
         if (runModel) {
-            prediction = predictor.predict(path)
+            prediction = predictor.predict(path);
+            drawing.ctx.beginPath();
+            drawing.ctx.moveTo(prediction.shape[prediction.shape.length-1].x, prediction.shape[prediction.shape.length-1].y);
+            for(let i = 0; i < prediction.shape.length; i++){
+                drawing.ctx.lineTo(prediction.shape[i].x, prediction.shape[i].y);
+            }
+            drawing.ctx.stroke();
             predictionElement.innerHTML = prediction.label;
             console.log(prediction);
         }
@@ -112,7 +118,7 @@ function main() {//idk bad name
             // saveImageList(images, predictedType);
         }
         if (key.key == "Insert"){
-            saveAllPathData();
+            saveSubsetPathData(["RTriangle"]);
         }
         // if (key.key == "Delete") {
         //     if (images.length) {

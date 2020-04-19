@@ -16,7 +16,7 @@
         "tsSrc/point.ts",
         "tsSrc/meta.ts",
         "tsSrc/image.ts",
-
+        "tsSrc/loadModel.ts"
 
     ]
 }
