@@ -2,7 +2,7 @@
   "name": "shaperecognizer",
   "version": "1.0.0",
   "description": "Shape Recognition",
-  "main": "build/index.js",
+  "main": "build/tsSrc/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
