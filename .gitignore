@@ -16,3 +16,5 @@ tsconfig.json
 models/Backup
 models/testing
 pathData
+models
+utils
