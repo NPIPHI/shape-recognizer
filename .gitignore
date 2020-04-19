@@ -13,8 +13,6 @@ accelerationTrainingImages
 tsSrc
 webpack.config.js
 tsconfig.json
-models/JSMainModel
-models/temporalTestingModel
-models/thiccModel
-models/tinyModelg
+models/Backup
+models/testing
 pathData
