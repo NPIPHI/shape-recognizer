@@ -3,7 +3,6 @@ import {Point, PointPath} from "./point"
 import {labels} from "./meta"
 import {RecognizerLoader} from "./loadModel"
 
-const modelName = "accelerationTestingModel"
 
 export class Prediction{
     label: string;

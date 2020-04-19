@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const model = require("../models/recognizer/model.json");
-const bin = require("../models/recognizer/binary.json");
+const model = require("../models/testing/model.json");
+const bin = require("../models/testing/binary.json");
 class RecognizerLoader {
     constructor() {
         this.isBrowser = !(typeof window === 'undefined');

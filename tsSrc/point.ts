@@ -176,7 +176,7 @@ export class PointPath {
         return this.length;
     }
     private getNormalizeTranform(): Transform {
-        const maxRatio = 2
+        const maxRatio = 4
         // let boundingBox = this.getBoundingBox();
         // let offset = boundingBox.points[1];
         // let rot = boundingBox.points[0].minus(boundingBox.points[1]).angle();
@@ -245,7 +245,7 @@ export class PointPath {
         }
         for(let i = 0; i < 4; i ++){
             let maxDot = Math.max(...copyPath.points.map(point=>(point.dot(blendedAxis[i]))));
-            if(squarePoints[i].dot(blendedAxis[i])-maxDot > 0.3){
+            if(squarePoints[i].dot(blendedAxis[i])-maxDot > 0.7){
                 squarePoints.splice(i,1)
                 let retPath = new PointPath(squarePoints);
                 retPath.applyTransform(copyPath.lastTranform.inverse())

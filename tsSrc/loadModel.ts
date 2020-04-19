@@ -1,6 +1,6 @@
 import * as tf from "@tensorflow/tfjs-core/dist/io/types"
-import * as model from "../models/recognizer/model.json"
-import * as bin from "../models/recognizer/binary.json"
+import * as model from "../models/testing/model.json"
+import * as bin from "../models/testing/binary.json"
 
 export class RecognizerLoader implements tf.IOHandler{
     private isBrowser: boolean;

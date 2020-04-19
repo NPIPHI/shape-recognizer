@@ -4,7 +4,6 @@ const tf = require("@tensorflow/tfjs");
 const point_1 = require("./point");
 const meta_1 = require("./meta");
 const loadModel_1 = require("./loadModel");
-const modelName = "accelerationTestingModel";
 class Prediction {
     constructor(label, boundingBox, center, confidence, shape) {
         this.label = label;

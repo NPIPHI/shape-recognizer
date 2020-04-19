@@ -19,6 +19,7 @@ let processedCanvas: HTMLCanvasElement;
 let predictor: any;
 let prediction: Prediction;
 let dataSavingControls: {activated: HTMLInputElement, options: HTMLInputElement[]}
+let lastPath: PointPath;
 
 
 ShapePredictor.loadModel().then((shapePredictor)=>{
@@ -91,12 +92,12 @@ function main() {//idk bad name
 
     drawing.onFinishDrawing = (path: PointPath) => {
         // lastImage = path.rastorizeRGB(xRes, yRes);
+        lastPath = path.copy();
         if (dataSavingControls.activated.checked) {
             savedPaths.paths.push(JSONify(path,getCurrentLabel()) as any);
             // images.push(path.rastorizeRGB(xRes, yRes));
             // images.push(path.flip().rastorizeRGB(xRes, yRes));
         }
-        // shapeAnylsis(path);
         if (runModel) {
             prediction = predictor.predict(path);
             drawing.ctx.beginPath();
@@ -119,6 +120,9 @@ function main() {//idk bad name
         }
         if (key.key == "Insert"){
             saveSubsetPathData(["RTriangle"]);
+        }
+        if (key.key == "r"){
+            predictor.predict(lastPath);
         }
         // if (key.key == "Delete") {
         //     if (images.length) {
