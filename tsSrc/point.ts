@@ -237,7 +237,7 @@ export class PointPath {
         //if axis aligned triangle, just normalise, test for missing corner
         let copyPath = this.copy();
         copyPath.normalize()
-        let squarePoints = [new Point(1, 1), new Point(0, 1), new Point(0, 0), new Point(1, 0)]
+        let squarePoints = [new Point(1, 1), new Point(1, 0), new Point(0, 0), new Point(0, 1)]
         let axies = [new Point(0, 1), new Point(1, 0), new Point(0, -1), new Point(-1, 0)];
         let squareDots = [2, 1, 1, 0];
         let blendedAxis: Point[] = [];
