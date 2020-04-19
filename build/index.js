@@ -50,11 +50,14 @@ class ShapePredictor {
         let values = label.dataSync();
         let index = values.indexOf(Math.max(...values));
         let keyPoints = this.getKeyPoints(path, meta_1.labels[index]);
+        let center = new point_1.Point(0, 0);
+        keyPoints.forEach(point => center.plusEquals(point));
+        center.timesEquals(new point_1.Point(1 / keyPoints.length, 1 / keyPoints.length));
         values.sort((a, b) => (b - a));
         let maxConfidence = values[0];
         let minConfidence = Math.max(0, values[1]);
         let confidence = (maxConfidence - minConfidence) / maxConfidence;
-        return new Prediction(meta_1.labels[index], { x1: boundingBox.points[0].x, y1: boundingBox.points[0].y, x2: boundingBox.points[2].x, y2: boundingBox.points[2].y }, boundingBox.points[0].plus(boundingBox.points[2]).times(0.5), confidence, keyPoints);
+        return new Prediction(meta_1.labels[index], { x1: boundingBox.points[0].x, y1: boundingBox.points[0].y, x2: boundingBox.points[2].x, y2: boundingBox.points[2].y }, center, confidence, keyPoints);
     }
     getKeyPoints(path, label) {
         if (label == "RTriangle") {
