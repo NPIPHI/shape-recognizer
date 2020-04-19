@@ -198,6 +198,31 @@ class PointPath {
         let maxY = Math.max(...yVals);
         return new PointPath([new Point(minX, minY), new Point(maxX, minY), new Point(maxX, maxY), new Point(minX, maxY)]);
     }
+    getMinimumRightTriangle() {
+        let copyPath = this.copy();
+        copyPath.normalize();
+        let squarePoints = [new Point(1, 1), new Point(0, 1), new Point(0, 0), new Point(1, 0)];
+        let axies = [new Point(0, 1), new Point(1, 0), new Point(0, -1), new Point(-1, 0)];
+        let squareDots = [2, 1, 1, 0];
+        let blendedAxis = [];
+        for (let i = 0; i < axies.length; i++) {
+            blendedAxis.push(axies[i].plus(axies[(i + 1) % axies.length]));
+        }
+        for (let i = 0; i < 4; i++) {
+            let maxDot = Math.max(...copyPath.points.map(point => (point.dot(blendedAxis[i]))));
+            if (squareDots[i] - maxDot > 0.3) {
+                let retPath = new PointPath(squarePoints.splice(i));
+                retPath.applyTransform(copyPath.lastTranform.inverse());
+                return retPath;
+            }
+        }
+        let fallBackPath = new PointPath(squarePoints);
+        fallBackPath.applyTransform(copyPath.lastTranform.inverse());
+        return fallBackPath;
+    }
+    copy() {
+        return new PointPath(this.points.slice(0, this.points.length));
+    }
     getMinimumBoundingBox() {
         let minHull = this.hull();
         let minRectArea = Infinity;

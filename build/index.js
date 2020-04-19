@@ -43,19 +43,26 @@ class ShapePredictor {
     }
     anyaliseShape(path) {
         let boundingBox = path.getAxisAlignedBoundingBox();
-        path.normalize();
-        let image = path.rastorizeRGB(this.xRes, this.yRes);
+        let normalizedPath = path.copy();
+        normalizedPath.normalize();
+        let image = normalizedPath.rastorizeRGB(this.xRes, this.yRes);
         let label = this.model.predict(image.data.reshape([1, this.xRes, this.yRes, 3]));
         let values = label.dataSync();
         let index = values.indexOf(Math.max(...values));
+        let keyPoints = this.getKeyPoints(path, meta_1.labels[index]);
         values.sort((a, b) => (b - a));
         let maxConfidence = values[0];
         let minConfidence = Math.max(0, values[1]);
         let confidence = (maxConfidence - minConfidence) / maxConfidence;
-        return new Prediction(meta_1.labels[index], { x1: boundingBox.points[0].x, y1: boundingBox.points[0].y, x2: boundingBox.points[2].x, y2: boundingBox.points[2].y }, boundingBox.points[0].plus(boundingBox.points[2]).times(0.5), confidence, boundingBox.points);
+        return new Prediction(meta_1.labels[index], { x1: boundingBox.points[0].x, y1: boundingBox.points[0].y, x2: boundingBox.points[2].x, y2: boundingBox.points[2].y }, boundingBox.points[0].plus(boundingBox.points[2]).times(0.5), confidence, keyPoints);
     }
     getKeyPoints(path, label) {
-        let boundingBox = path.getAxisAlignedBoundingBox().points;
+        if (label = "RTriangle") {
+            return path.getMinimumRightTriangle().points;
+        }
+        else {
+            return path.getAxisAlignedBoundingBox().points;
+        }
     }
 }
 exports.ShapePredictor = ShapePredictor;

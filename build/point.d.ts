@@ -43,6 +43,8 @@ export declare class PointPath {
     private getNormalizeTranform;
     static unitSquare(): PointPath;
     getAxisAlignedBoundingBox(): PointPath;
+    getMinimumRightTriangle(): PointPath;
+    copy(): PointPath;
     private getMinimumBoundingBox;
     private hull;
     private quickHall;

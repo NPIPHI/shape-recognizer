@@ -102,6 +102,7 @@ function main() {//idk bad name
             predictionElement.innerHTML = prediction.label;
             console.log(prediction);
         }
+        path.normalize()
         setCanvas(path.rastorizeRGB(xRes, yRes));
     }
 
