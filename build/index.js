@@ -57,7 +57,7 @@ class ShapePredictor {
         return new Prediction(meta_1.labels[index], { x1: boundingBox.points[0].x, y1: boundingBox.points[0].y, x2: boundingBox.points[2].x, y2: boundingBox.points[2].y }, boundingBox.points[0].plus(boundingBox.points[2]).times(0.5), confidence, keyPoints);
     }
     getKeyPoints(path, label) {
-        if (label = "RTriangle") {
+        if (label == "RTriangle") {
             return path.getMinimumRightTriangle().points;
         }
         else {
