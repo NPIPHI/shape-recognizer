@@ -246,7 +246,7 @@ export class PointPath {
         }
         for(let i = 0; i < 4; i ++){
             let maxDot = Math.max(...copyPath.points.map(point=>(point.dot(blendedAxis[i]))));
-            if(squareDots[i]-maxDot > 0.3){
+            if(squarePoints[i].dot(blendedAxis[i])-maxDot > 0.3){
                 squarePoints.splice(i,1)
                 let retPath = new PointPath(squarePoints);
                 retPath.applyTransform(copyPath.lastTranform.inverse())
