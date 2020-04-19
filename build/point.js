@@ -81,7 +81,7 @@ class PointPath {
     }
     push(point) {
         this.points.push(point);
-        if (this.posAt.length > 1) {
+        if (this.points.length > 1) {
             let dist = this.points[this.points.length - 2].dist(point);
             this.length += dist;
             this.distances.push(dist);
@@ -221,7 +221,11 @@ class PointPath {
         return fallBackPath;
     }
     copy() {
-        return new PointPath(this.points.slice(0, this.points.length));
+        let newPoints = [];
+        this.points.forEach(point => {
+            newPoints.push(new Point(point.x, point.y));
+        });
+        return new PointPath(newPoints);
     }
     getMinimumBoundingBox() {
         let minHull = this.hull();
