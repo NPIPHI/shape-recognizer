@@ -45,7 +45,7 @@ export declare class PointPath {
     getAxisAlignedBoundingBox(): PointPath;
     getMinimumRightTriangle(): PointPath;
     copy(): PointPath;
-    private getMinimumBoundingBox;
+    getMinimumBoundingBox(): PointPath;
     private hull;
     private quickHall;
     rastorizeBW(xRes: number, yRes: number, blurRadius?: number): bwImage;

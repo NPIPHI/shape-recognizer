@@ -60,6 +60,9 @@ class ShapePredictor {
         if (label == "RTriangle") {
             return path.getMinimumRightTriangle().points;
         }
+        else if (label == "Slash") {
+            return path.getMinimumBoundingBox().points;
+        }
         else {
             return path.getAxisAlignedBoundingBox().points;
         }

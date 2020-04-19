@@ -266,7 +266,7 @@ export class PointPath {
         })
         return new PointPath(newPoints)
     }
-    private getMinimumBoundingBox(): PointPath {
+    getMinimumBoundingBox(): PointPath {
         let minHull = this.hull();
         let minRectArea = Infinity;
         let minRect: Point[] = [];
