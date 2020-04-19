@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const tf = require("@tensorflow/tfjs");
 const point_1 = require("./point");
 const meta_1 = require("./meta");
+const loadModel_1 = require("./loadModel");
 const modelName = "accelerationTestingModel";
 class Prediction {
     constructor(label, boundingBox, center, confidence, shape) {
@@ -21,7 +22,7 @@ class ShapePredictor {
         this.model = model;
     }
     static async loadModel() {
-        let model = await tf.loadLayersModel("https://raw.githubusercontent.com/NPIPHI/shape-recognizer/master/models/recognizer/model.json");
+        let model = await tf.loadLayersModel(new loadModel_1.RecognizerLoader());
         return new ShapePredictor(model);
     }
     predict(shape) {

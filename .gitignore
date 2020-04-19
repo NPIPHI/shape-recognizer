@@ -10,7 +10,7 @@ testingData
 venv
 index.html
 accelerationTrainingImages
-tsSrc
+./tsSrc
 webpack.config.js
 tsconfig.json
 models/Backup

@@ -203,7 +203,6 @@ class PointPath {
         copyPath.normalize();
         let squarePoints = [new Point(1, 1), new Point(1, 0), new Point(0, 0), new Point(0, 1)];
         let axies = [new Point(0, 1), new Point(1, 0), new Point(0, -1), new Point(-1, 0)];
-        let squareDots = [2, 1, 1, 0];
         let blendedAxis = [];
         for (let i = 0; i < axies.length; i++) {
             blendedAxis.push(axies[i].plus(axies[(i + 1) % axies.length]));

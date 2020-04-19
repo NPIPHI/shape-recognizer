@@ -17,6 +17,5 @@
         "tsSrc/meta.ts",
         "tsSrc/image.ts",
         "tsSrc/loadModel.ts"
-
     ]
 }
