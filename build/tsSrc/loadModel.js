@@ -1,7 +1,18 @@
 "use strict";
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const model = require("../models/testing/model.json");
-const bin = require("../models/testing/binary.json");
+const model = __importStar(require("../models/recognizer/model.json"));
+const bin = __importStar(require("../models/recognizer/binary.json"));
+const atob_1 = __importDefault(require("atob"));
 class RecognizerLoader {
     constructor() {
         this.isBrowser = !(typeof window === 'undefined');
@@ -33,9 +44,14 @@ class RecognizerLoader {
             return bytes.buffer;
         }
         else {
-            return Buffer.from(base64, 'base64');
+            var binary_string = atob_1.default(base64);
+            var len = binary_string.length;
+            var bytes = new Uint8Array(len);
+            for (var i = 0; i < len; i++) {
+                bytes[i] = binary_string.charCodeAt(i);
+            }
+            return bytes.buffer;
         }
     }
 }
 exports.RecognizerLoader = RecognizerLoader;
-//# sourceMappingURL=loadModel.js.map

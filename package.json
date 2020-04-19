@@ -11,6 +11,8 @@
   "dependencies": {
     "@tensorflow/tfjs": "^1.7.2",
     "@tensorflow/tfjs-node": "^1.7.2",
+    "@types/atob": "^2.1.2",
+    "atob": "^2.1.2",
     "typescript": "^3.8.3"
   },
   "devDependencies": {

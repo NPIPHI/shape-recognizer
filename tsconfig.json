@@ -6,17 +6,18 @@
         "noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": true,
-        "sourceMap": true,
+        "sourceMap": false,
         "skipLibCheck": true,
         "outDir": "build",
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+        "esModuleInterop": true
     },
     "include": [
-        "tsSrc/*"
-        // "tsSrc/index.ts",
-        // "tsSrc/point.ts",
-        // "tsSrc/meta.ts",
-        // "tsSrc/image.ts",
-        // "tsSrc/loadModel.ts"
+        //"tsSrc/*"
+        "tsSrc/index.ts",
+        "tsSrc/point.ts",
+        "tsSrc/meta.ts",
+        "tsSrc/image.ts",
+        "tsSrc/loadModel.ts"
     ]
 }

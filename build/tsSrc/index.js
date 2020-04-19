@@ -1,6 +1,13 @@
 "use strict";
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const tf = require("@tensorflow/tfjs");
+const tf = __importStar(require("@tensorflow/tfjs"));
 const point_1 = require("./point");
 const meta_1 = require("./meta");
 const loadModel_1 = require("./loadModel");
@@ -72,4 +79,3 @@ class ShapePredictor {
     }
 }
 exports.ShapePredictor = ShapePredictor;
-//# sourceMappingURL=index.js.map

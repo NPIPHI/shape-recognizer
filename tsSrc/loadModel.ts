@@ -1,6 +1,7 @@
 import * as tf from "@tensorflow/tfjs-core/dist/io/types"
-import * as model from "../models/testing/model.json"
-import * as bin from "../models/testing/binary.json"
+import * as model from "../models/recognizer/model.json"
+import * as bin from "../models/recognizer/binary.json"
+import atob from "atob"
 
 export class RecognizerLoader implements tf.IOHandler{
     private isBrowser: boolean;
@@ -33,7 +34,13 @@ export class RecognizerLoader implements tf.IOHandler{
             }
             return bytes.buffer;
         } else {
-            return Buffer.from(base64, 'base64');
+            var binary_string = atob(base64);
+            var len = binary_string.length;
+            var bytes = new Uint8Array(len);
+            for (var i = 0; i < len; i++) {
+                bytes[i] = binary_string.charCodeAt(i);
+            }
+            return bytes.buffer;
         }
     }
 }

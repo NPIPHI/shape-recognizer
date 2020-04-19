@@ -367,4 +367,3 @@ class PointPath {
     }
 }
 exports.PointPath = PointPath;
-//# sourceMappingURL=point.js.map
