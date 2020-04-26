@@ -16,12 +16,12 @@ export class Prediction{
     }
 }
 
-export class Elipse extends Prediction{
+export class Ellipse extends Prediction{
     xRadius: number;
     yRadius: number;
     center: {x: number, y: number};
     constructor(boundingBox: {x1: number, y1: number, x2: number, y2: number}, confidence: number){
-        super("Elipse", boundingBox, confidence);
+        super("Ellipse", boundingBox, confidence);
         this.xRadius = (boundingBox.x2 - boundingBox.x1)/2
         this.yRadius = (boundingBox.y2 - boundingBox.y1)/2
         this.center = {x: (boundingBox.x1 + boundingBox.x2)/2, y: (boundingBox.y1 + boundingBox.y2)/2};
@@ -83,7 +83,7 @@ export class ShapePredictor{
         let model = await tf.loadLayersModel(new RecognizerLoader())
         return new ShapePredictor(model);
     }
-    predict(shape: {x: number, y: number}[] | PointPath): Elipse | Rectangle | RightTriangle | AxisZigZag | MultiZigZag | Staple | Slash{
+    predict(shape: {x: number, y: number}[] | PointPath): Ellipse | Rectangle | RightTriangle | AxisZigZag | MultiZigZag | Staple | Slash{
         let image;
         let path: PointPath;
         if((shape as Point[]).map){
@@ -98,7 +98,7 @@ export class ShapePredictor{
             throw "Incomplete shape"
         }
     }
-    private anyaliseShape(path: PointPath): Elipse | Rectangle | RightTriangle | AxisZigZag | MultiZigZag | Staple | Slash{
+    private anyaliseShape(path: PointPath): Ellipse | Rectangle | RightTriangle | AxisZigZag | MultiZigZag | Staple | Slash{
         let boundingBox = path.getAxisAlignedBoundingBox();
         let normalizedPath = path.copy()
         normalizedPath.normalize();
@@ -115,12 +115,12 @@ export class ShapePredictor{
         return this.returnAsShape(labels[index], {x1: boundingBox.points[0].x, y1: boundingBox.points[0].y, x2: boundingBox.points[2].x, y2: boundingBox.points[2].y}, confidence, keyPoints)
         // return new Prediction(labels[index], {x1: boundingBox.points[0].x, y1: boundingBox.points[0].y, x2: boundingBox.points[2].x, y2: boundingBox.points[2].y}, center, confidence, keyPoints)
     }
-    private returnAsShape(label: string, boundingBox: {x1: number, y1: number, x2: number, y2: number}, confidence: number, keyPoints: Point[]): Elipse | Rectangle | RightTriangle | AxisZigZag | MultiZigZag | Staple | Slash{
+    private returnAsShape(label: string, boundingBox: {x1: number, y1: number, x2: number, y2: number}, confidence: number, keyPoints: Point[]): Ellipse | Rectangle | RightTriangle | AxisZigZag | MultiZigZag | Staple | Slash{
         switch(label){
             case "RightTriangle":
                 return new RightTriangle(boundingBox, confidence, keyPoints[0])
-            case "Elipse":
-                return new Elipse(boundingBox, confidence)
+            case "Ellipse":
+                return new Ellipse(boundingBox, confidence)
             case "Rectangle":
                 return new Rectangle(boundingBox, confidence)
             case "AxisZigZag":

@@ -21,15 +21,15 @@ class Prediction {
     }
 }
 exports.Prediction = Prediction;
-class Elipse extends Prediction {
+class Ellipse extends Prediction {
     constructor(boundingBox, confidence) {
-        super("Elipse", boundingBox, confidence);
+        super("Ellipse", boundingBox, confidence);
         this.xRadius = (boundingBox.x2 - boundingBox.x1) / 2;
         this.yRadius = (boundingBox.y2 - boundingBox.y1) / 2;
         this.center = { x: (boundingBox.x1 + boundingBox.x2) / 2, y: (boundingBox.y1 + boundingBox.y2) / 2 };
     }
 }
-exports.Elipse = Elipse;
+exports.Ellipse = Ellipse;
 class Rectangle extends Prediction {
     constructor(boundingBox, confidence) {
         super("Rectangle", boundingBox, confidence);
@@ -114,8 +114,8 @@ class ShapePredictor {
         switch (label) {
             case "RightTriangle":
                 return new RightTriangle(boundingBox, confidence, keyPoints[0]);
-            case "Elipse":
-                return new Elipse(boundingBox, confidence);
+            case "Ellipse":
+                return new Ellipse(boundingBox, confidence);
             case "Rectangle":
                 return new Rectangle(boundingBox, confidence);
             case "AxisZigZag":

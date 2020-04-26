@@ -17,7 +17,7 @@ export declare class Prediction {
         y2: number;
     }, confidence: number);
 }
-export declare class Elipse extends Prediction {
+export declare class Ellipse extends Prediction {
     xRadius: number;
     yRadius: number;
     center: {
@@ -96,7 +96,7 @@ export declare class ShapePredictor {
     predict(shape: {
         x: number;
         y: number;
-    }[] | PointPath): Elipse | Rectangle | RightTriangle | AxisZigZag | MultiZigZag | Staple | Slash;
+    }[] | PointPath): Ellipse | Rectangle | RightTriangle | AxisZigZag | MultiZigZag | Staple | Slash;
     private anyaliseShape;
     private returnAsShape;
     private getKeyPoints;
