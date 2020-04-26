@@ -198,6 +198,25 @@ class PointPath {
         let maxY = Math.max(...yVals);
         return new PointPath([new Point(minX, minY), new Point(maxX, minY), new Point(maxX, maxY), new Point(minX, maxY)]);
     }
+    getRightVertex() {
+        let copyPath = this.copy();
+        copyPath.normalize();
+        let squarePoints = [new Point(1, 1), new Point(1, 0), new Point(0, 0), new Point(0, 1)];
+        let axies = [new Point(0, 1), new Point(1, 0), new Point(0, -1), new Point(-1, 0)];
+        let blendedAxis = [];
+        for (let i = 0; i < axies.length; i++) {
+            blendedAxis.push(axies[i].plus(axies[(i + 1) % axies.length]));
+        }
+        let diffrencesFromSquare = [];
+        for (let i = 0; i < 4; i++) {
+            let maxDot = Math.max(...copyPath.points.map(point => (point.dot(blendedAxis[i]))));
+            diffrencesFromSquare.push(squarePoints[i].dot(blendedAxis[i]) - maxDot);
+        }
+        let missingIndex = diffrencesFromSquare.indexOf(Math.max(...diffrencesFromSquare));
+        let retPath = new PointPath([squarePoints[(missingIndex + 2) % 4]]);
+        retPath.applyTransform(copyPath.lastTranform.inverse());
+        return retPath.points[0];
+    }
     getMinimumRightTriangle() {
         let copyPath = this.copy();
         copyPath.normalize();

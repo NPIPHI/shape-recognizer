@@ -4,7 +4,7 @@ import * as input from "./input"
 import { saveImageList, JSONify } from "./imageIO"
 import { PointPath, Point } from "./point"
 import { bwImage, RGBImage } from './image';
-import {ShapePredictor, Prediction} from "./index"
+import {ShapePredictor, Prediction, RightTriangle} from "./index"
 import {saveAllPathData, saveSubsetPathData} from "./dataGenerator"
 import * as savedPaths from "../pathData/paths.json"
 import {xRes, yRes, labels} from "./meta"
@@ -27,47 +27,10 @@ ShapePredictor.loadModel().then((shapePredictor)=>{
     main();
 })
 
-// function categorize(image: bwImage | RGBImage): string {
-//     let prediction = model.predict(image.data.reshape([1, image.width, image.height, image.depth])) as tf.Tensor;
-//     let values = prediction.dataSync();
-//     let index = values.indexOf(Math.max(...values));
-//     return names[index];
-// }
-
 function setCanvas(image: bwImage | RGBImage) {
     let ctx = processedCanvas.getContext("2d");
     ctx.clearRect(0, 0, image.width, image.height)
     image.putImageData(processedCanvas)
-}
-
-function shapeAnylsis(path: PointPath){
-    let shapeType = predictor.predict(path);
-    let boundingBox: PointPath;
-    console.log()
-    if(shapeType=="Rectangle"){
-        boundingBox = new PointPath([new Point(0, 0), new Point(0, 1), new Point(1, 1), new Point(1, 0)]);
-    }
-    else if(shapeType=="Circle"){
-        boundingBox = new PointPath([]);
-        for(let i = 0; i < 40; i++){
-            boundingBox.push(new Point(1/2+Math.cos(2*Math.PI * i /40)/2, 1/2+Math.sin(2*Math.PI * i /40)/2))
-        }
-    }
-    else if(shapeType=="Triangle"){
-        boundingBox = new PointPath([new Point(0,0), new Point(1, 0), new Point(0.5, 1)]);
-    }
-    else{
-        boundingBox = new PointPath([new Point(0.5, 0), new Point(0.5, 1), new Point(0.5, 0.5), new Point(0, 0.5), new Point(1, 0.5), new Point(0.5, 0.5)]);
-    }
-    boundingBox.applyTransform(path.lastTranform.inverse());
-    drawing.ctx.strokeStyle = "red";
-    drawing.ctx.beginPath()
-    drawing.ctx.moveTo(boundingBox.points[boundingBox.points.length-1].x, boundingBox.points[boundingBox.points.length-1].y)
-    for(let i = 0; i < boundingBox.points.length; i ++){
-        drawing.ctx.lineTo(boundingBox.points[i].x, boundingBox.points[i].y)
-    }
-    drawing.ctx.stroke()
-    drawing.ctx.strokeStyle = "black";
 }
 
 function download(content: string, fileName: string, contentType: string) {
@@ -100,12 +63,15 @@ function main() {//idk bad name
         }
         if (runModel) {
             prediction = predictor.predict(path);
-            drawing.ctx.beginPath();
-            drawing.ctx.moveTo(prediction.shape[prediction.shape.length-1].x, prediction.shape[prediction.shape.length-1].y);
-            for(let i = 0; i < prediction.shape.length; i++){
-                drawing.ctx.lineTo(prediction.shape[i].x, prediction.shape[i].y);
+            // drawing.ctx.beginPath();
+            // drawing.ctx.moveTo(prediction.shape[prediction.shape.length-1].x, prediction.shape[prediction.shape.length-1].y);
+            // for(let i = 0; i < prediction.shape.length; i++){
+            //     drawing.ctx.lineTo(prediction.shape[i].x, prediction.shape[i].y);
+            // }
+            // drawing.ctx.stroke();
+            if(prediction.label == "RightTriangle"){
+                drawing.ctx.fillRect((prediction as RightTriangle).rightVertex.x, (prediction as RightTriangle).rightVertex.y, 5, 5)
             }
-            drawing.ctx.stroke();
             predictionElement.innerHTML = prediction.label;
             console.log(prediction);
         }
@@ -120,9 +86,6 @@ function main() {//idk bad name
         }
         if (key.key == "Insert"){
             saveSubsetPathData(["Circle"]);
-        }
-        if (key.key == "r"){
-            predictor.predict(lastPath);
         }
         // if (key.key == "Delete") {
         //     if (images.length) {

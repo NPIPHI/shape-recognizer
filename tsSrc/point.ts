@@ -211,30 +211,7 @@ export class PointPath {
         let maxY = Math.max(...yVals);
         return new PointPath([new Point(minX, minY), new Point(maxX, minY), new Point(maxX, maxY), new Point(minX, maxY)])
     }
-    getMinimumRightTriangle(): PointPath {
-        // let axies = [new Point(0, 1), new Point(1, 0), new Point(0, -1), new Point(-1, 0)];
-        // let hull = this.hull();
-        // let minArea = Infinity;
-        // axies.forEach(axis=>{
-        //     let minOnAxis = Math.min(...hull.points.map(point=>(point.dot(axis))))
-        //     let perpAxis = new Point(-axis.y, axis.x)
-        //     let minOnPerp = Math.min(...hull.points.map(point=>(point.dot(perpAxis))))
-        //     let possibleExposedFaces = [];
-        //     for(let i = 0; i < hull.points.length; i++){
-        //         let p1 = hull.points[i];
-        //         let p2 = hull.points[(i+1)%hull.points.length];
-        //         let normal = new Point(-p2.y + p2.x, p2.x - p1.x)
-        //         if(normal.dot(axis)>0&&normal.dot(perpAxis)>0){
-        //             possibleExposedFaces.push(normal.normalize());
-        //         }
-        //     }
-        //     possibleExposedFaces.forEach(normal=>{
-        //         let maxPoint = Math.max(...hull.points.map(point=>(point.dot(normal))))
-        //         let minPoint = (new Point(minOnAxis, minOnPerp).dot(normal))
-        //     })
-        // })
-
-        //if axis aligned triangle, just normalise, test for missing corner
+    getRightVertex(): Point {
         let copyPath = this.copy();
         copyPath.normalize()
         let squarePoints = [new Point(1, 1), new Point(1, 0), new Point(0, 0), new Point(0, 1)]
@@ -243,6 +220,28 @@ export class PointPath {
         for(let i = 0; i < axies.length; i++){
             blendedAxis.push(axies[i].plus(axies[(i+1)%axies.length]));
         }
+        //TODO just pick minimum
+        let diffrencesFromSquare: number[] = [];
+        for(let i = 0; i < 4; i ++){
+            let maxDot = Math.max(...copyPath.points.map(point=>(point.dot(blendedAxis[i]))));
+            diffrencesFromSquare.push(squarePoints[i].dot(blendedAxis[i])-maxDot);
+        }
+        let missingIndex = diffrencesFromSquare.indexOf(Math.max(...diffrencesFromSquare))
+        let retPath = new PointPath([squarePoints[(missingIndex+2)%4]]);
+        retPath.applyTransform(copyPath.lastTranform.inverse())
+        return retPath.points[0];
+    }
+    getMinimumRightTriangle(): PointPath {
+        //tests for missing corner
+        let copyPath = this.copy();
+        copyPath.normalize()
+        let squarePoints = [new Point(1, 1), new Point(1, 0), new Point(0, 0), new Point(0, 1)]
+        let axies = [new Point(0, 1), new Point(1, 0), new Point(0, -1), new Point(-1, 0)];
+        let blendedAxis: Point[] = [];
+        for(let i = 0; i < axies.length; i++){
+            blendedAxis.push(axies[i].plus(axies[(i+1)%axies.length]));
+        }
+        //TODO just pick minimum
         for(let i = 0; i < 4; i ++){
             let maxDot = Math.max(...copyPath.points.map(point=>(point.dot(blendedAxis[i]))));
             if(squarePoints[i].dot(blendedAxis[i])-maxDot > 0.7){
