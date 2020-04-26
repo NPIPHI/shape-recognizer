@@ -17,4 +17,5 @@ models/Backup
 models/testing
 pathData
 ./models
+*.bin
 utils

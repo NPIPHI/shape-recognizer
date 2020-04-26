@@ -119,7 +119,7 @@ function main() {//idk bad name
             // saveImageList(images, predictedType);
         }
         if (key.key == "Insert"){
-            saveSubsetPathData(["Staple"]);
+            saveSubsetPathData(["Circle"]);
         }
         if (key.key == "r"){
             predictor.predict(lastPath);

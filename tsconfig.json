@@ -14,6 +14,7 @@
     },
     "include": [
         //"tsSrc/*"
+        "tsSrc/nodeTest.ts",
         "tsSrc/index.ts",
         "tsSrc/point.ts",
         "tsSrc/meta.ts",
