@@ -1,6 +1,6 @@
 {
   "name": "shaperecognizer",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Shape Recognition",
   "main": "build/tsSrc/index.js",
   "scripts": {
