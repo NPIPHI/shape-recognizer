@@ -2,6 +2,9 @@
  
  Usage:
  ```
+ npm install https://github.com/NPIPHI/shape-recognizer
+ ```
+ ```Javascript
  const { ShapePredictor } = require("shaperecognizer");
 
 async function example(){
@@ -16,7 +19,7 @@ async function example(){
 example();
 ```
 Output:
-```
+```Javascript
 Ellipse {
   label: 'Ellipse',
   boundingBox: {
