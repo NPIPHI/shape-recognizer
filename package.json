@@ -9,7 +9,7 @@
   "author": "Nicholas Phillips",
   "license": "ISC",
   "dependencies": {
-    "@tensorflow/tfjs": "^1.7.3",
+    "@tensorflow/tfjs": "^4.8.0",
     "@types/atob": "^2.1.2",
     "atob": "^2.1.2"
   },
